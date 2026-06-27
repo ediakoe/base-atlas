@@ -1,0 +1,76 @@
+function App() {
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background:
+          "radial-gradient(circle at top, #1e3a8a 0%, #0f172a 40%, #020617 100%)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "white",
+        fontFamily: "Arial",
+      }}
+    >
+      <div
+        style={{
+          width: "90%",
+          maxWidth: "700px",
+          textAlign: "center",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "64px",
+            marginBottom: "10px",
+          }}
+        >
+          🌌 Base Universe
+        </h1>
+
+        <p
+          style={{
+            color: "#94a3b8",
+            fontSize: "20px",
+            marginBottom: "50px",
+          }}
+        >
+          Explore your Base wallet like never before.
+        </p>
+
+        <input
+          placeholder="Enter Base Wallet Address..."
+          style={{
+            width: "100%",
+            padding: "18px",
+            borderRadius: "14px",
+            border: "1px solid #334155",
+            background: "#111827",
+            color: "white",
+            fontSize: "18px",
+            marginBottom: "20px",
+            boxSizing: "border-box",
+          }}
+        />
+
+        <button
+          style={{
+            width: "100%",
+            padding: "18px",
+            borderRadius: "14px",
+            border: "none",
+            background: "#0052FF",
+            color: "white",
+            fontSize: "20px",
+            fontWeight: "bold",
+            cursor: "pointer",
+          }}
+        >
+          🚀 Explore Universe
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default App;
