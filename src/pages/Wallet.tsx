@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   RadarChart,
@@ -15,30 +16,81 @@ import {
 import ScoreBreakdown from "../components/ScoreBreakdown";
 import ShareCard from "../components/ShareCard";
 
+import {
+  getWalletBalance,
+  getTokenCount,
+  getNFTCount,
+} from "../services/alchemy";
+
 export default function Wallet() {
   const { address } = useParams();
 
-  const profile = {
-    trader: 82,
-    farmer: 91,
-    collector: 65,
-    builder: 48,
-    defi: 87,
-  };
+  const [balance, setBalance] = useState("0");
+  const [tokenCount, setTokenCount] = useState("0");
+  const [nftCount, setNftCount] = useState("0");
 
-  const atlasScore = calculateAtlasScore(profile);
-  const archetype = getArchetype(profile);
+  useEffect(() => {
+    async function loadWalletData() {
+      if (!address) return;
+
+      try {
+        const balanceResult =
+          await getWalletBalance(address);
+
+        const tokens =
+          await getTokenCount(address);
+
+        const nfts =
+          await getNFTCount(address);
+
+        setBalance(balanceResult);
+        setTokenCount(tokens.toString());
+        setNftCount(nfts.toString());
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    loadWalletData();
+  }, [address]);
+
+  const atlasScore = calculateAtlasScore({
+    balance: Number(balance),
+    tokens: Number(tokenCount),
+    nfts: Number(nftCount),
+  });
+
+  const archetype = getArchetype({
+    balance: Number(balance),
+    tokens: Number(tokenCount),
+    nfts: Number(nftCount),
+  });
 
   const dnaData = [
-    { trait: "Trader", value: profile.trader },
-    { trait: "Farmer", value: profile.farmer },
-    { trait: "Collector", value: profile.collector },
-    { trait: "Builder", value: profile.builder },
-    { trait: "DeFi", value: profile.defi },
+    {
+      trait: "Balance",
+      value: Math.min(Number(balance) * 10, 100),
+    },
+    {
+      trait: "Tokens",
+      value: Math.min(Number(tokenCount) * 2, 100),
+    },
+    {
+      trait: "NFTs",
+      value: Math.min(Number(nftCount) * 3, 100),
+    },
+    {
+      trait: "Activity",
+      value: 60,
+    },
+    {
+      trait: "Potential",
+      value: 85,
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-[#030712] text-white p-8">
+    <div className="min-h-screen bg-[#030712] p-8 text-white">
       <div className="mx-auto max-w-7xl">
 
         <h1 className="text-5xl font-black">
@@ -49,7 +101,6 @@ export default function Wallet() {
           Analyze wallets across the Base ecosystem.
         </p>
 
-        {/* Wallet Address */}
         <div className="mt-8 rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
           <p className="text-sm text-slate-500">
             Wallet Address
@@ -60,8 +111,7 @@ export default function Wallet() {
           </p>
         </div>
 
-        {/* Stats */}
-        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-5">
 
           <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
             <p className="text-slate-400">
@@ -75,21 +125,35 @@ export default function Wallet() {
 
           <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
             <p className="text-slate-400">
-              Wallet Rank
+              Balance
             </p>
 
-            <h2 className="mt-2 text-4xl font-black">
-              #128K
+            <h2 className="mt-2 text-4xl font-black text-yellow-400">
+              {balance}
+            </h2>
+
+            <p className="mt-2 text-sm text-slate-500">
+              ETH
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
+            <p className="text-slate-400">
+              Tokens
+            </p>
+
+            <h2 className="mt-2 text-4xl font-black text-cyan-400">
+              {tokenCount}
             </h2>
           </div>
 
           <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
             <p className="text-slate-400">
-              Airdrop Score
+              NFTs
             </p>
 
-            <h2 className="mt-2 text-4xl font-black text-blue-400">
-              92
+            <h2 className="mt-2 text-4xl font-black text-pink-400">
+              {nftCount}
             </h2>
           </div>
 
@@ -105,7 +169,6 @@ export default function Wallet() {
 
         </div>
 
-        {/* DNA + Intelligence */}
         <div className="mt-8 grid gap-8 lg:grid-cols-2">
 
           <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
@@ -151,29 +214,9 @@ export default function Wallet() {
               </h3>
 
               <p className="mt-4 leading-8 text-slate-300">
-                Atlas Intelligence classified this wallet based on
-                dominant behavioral patterns observed in the ecosystem.
+                Atlas Intelligence classified this wallet
+                based on real onchain activity.
               </p>
-
-            </div>
-
-            <div className="mt-6 space-y-4">
-
-              <div className="rounded-2xl bg-slate-800/50 p-4">
-                🚀 Strong ecosystem participation
-              </div>
-
-              <div className="rounded-2xl bg-slate-800/50 p-4">
-                🌉 Consistent cross-protocol activity
-              </div>
-
-              <div className="rounded-2xl bg-slate-800/50 p-4">
-                💧 High liquidity engagement
-              </div>
-
-              <div className="rounded-2xl bg-slate-800/50 p-4">
-                🏆 Excellent airdrop readiness
-              </div>
 
             </div>
 
@@ -181,18 +224,16 @@ export default function Wallet() {
 
         </div>
 
-        {/* Score Breakdown */}
         <div className="mt-8">
           <ScoreBreakdown
-            trader={profile.trader}
-            farmer={profile.farmer}
-            collector={profile.collector}
-            builder={profile.builder}
-            defi={profile.defi}
+            trader={Math.min(Number(tokenCount) * 2, 100)}
+            farmer={Math.min(Number(balance) * 20, 100)}
+            collector={Math.min(Number(nftCount) * 3, 100)}
+            builder={60}
+            defi={85}
           />
         </div>
 
-        {/* Share Profile */}
         <div className="mt-8">
 
           <ShareCard
@@ -201,9 +242,11 @@ export default function Wallet() {
           />
 
           <button
-            className="mt-4 rounded-2xl bg-[#0052FF] px-6 py-3 font-semibold transition hover:bg-blue-600"
+            className="mt-4 rounded-2xl bg-[#0052FF] px-6 py-3 font-semibold"
             onClick={() => {
-              navigator.clipboard.writeText(window.location.href);
+              navigator.clipboard.writeText(
+                window.location.href
+              );
               alert("Profile link copied!");
             }}
           >

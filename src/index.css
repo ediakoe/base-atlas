@@ -1,6 +1,29 @@
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
+  min-width: 320px;
+  overflow-x: hidden;
+
   background: #030712;
+  color: #ffffff;
+
+  font-family: "Space Grotesk", sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
 }
