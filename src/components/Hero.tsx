@@ -12,118 +12,165 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-[#030712] text-white">
+    <section className="relative overflow-hidden bg-[#030712] text-white">
 
-      {/* Background Glow */}
+      {/* Background */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#1036a8_0%,#030712_55%)]" />
 
-      {/* Main Glow */}
-      <div className="absolute left-1/2 top-20 h-[900px] w-[900px] -translate-x-1/2 rounded-full bg-blue-600/20 blur-[220px]" />
+      <div className="absolute left-1/2 top-0 h-[700px] w-[700px] -translate-x-1/2 rounded-full bg-blue-600/20 blur-[180px]" />
 
-      {/* Orbit 1 */}
-      <div className="absolute left-1/2 top-40 h-[420px] w-[420px] -translate-x-1/2 rounded-full border border-blue-500/20 animate-spin [animation-duration:30s]" />
+      <div className="relative mx-auto max-w-7xl px-6 py-24">
 
-      {/* Orbit 2 */}
-      <div className="absolute left-1/2 top-32 h-[560px] w-[560px] -translate-x-1/2 rounded-full border border-blue-400/10 animate-spin [animation-duration:50s] [animation-direction:reverse]" />
+        <div className="grid items-center gap-16 lg:grid-cols-2">
 
-      {/* Stars */}
-      <div className="absolute inset-0">
-        {[...Array(120)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full bg-white"
-            style={{
-              width: `${Math.random() * 3 + 1}px`,
-              height: `${Math.random() * 3 + 1}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              opacity: Math.random() * 0.8 + 0.2,
-            }}
-          />
-        ))}
-      </div>
+          {/* Left Side */}
+          <div>
 
-      <div className="relative mx-auto flex min-h-screen max-w-7xl items-center px-6">
+            <div className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-2 text-sm text-blue-300">
+              BASE ECOSYSTEM INTELLIGENCE
+            </div>
 
-        <div className="mx-auto w-full max-w-5xl text-center">
+            <h1 className="mt-8 text-5xl font-black leading-tight md:text-7xl">
+              Know Your Place
+              <span className="block text-blue-400">
+                In The Base Economy
+              </span>
+            </h1>
 
-          {/* Logo */}
-          <div className="relative mx-auto flex h-[240px] w-[240px] items-center justify-center">
+            <p className="mt-6 max-w-xl text-lg text-slate-400">
+              Atlas transforms wallet activity into identity,
+              reputation, wallet DNA and ecosystem intelligence.
+            </p>
 
-            <div className="absolute h-[300px] w-[300px] rounded-full bg-blue-500/20 blur-3xl" />
+            {/* Search */}
+            <div className="mt-10 flex flex-col gap-4 md:flex-row">
 
-            <div className="relative h-40 w-40 rounded-[40px] bg-[#0052FF] shadow-[0_0_120px_rgba(0,82,255,1)]" />
+              <input
+                value={wallet}
+                onChange={(e) => setWallet(e.target.value)}
+                placeholder="Paste your Base wallet address..."
+                className="w-full rounded-2xl border border-slate-700 bg-slate-900/70 px-6 py-4 text-white outline-none transition focus:border-blue-500"
+              />
+
+              <button
+                onClick={handleExplore}
+                className="rounded-2xl bg-[#0052FF] px-8 py-4 font-semibold shadow-[0_0_40px_rgba(0,82,255,.4)] transition hover:scale-105"
+              >
+                Analyze Wallet
+              </button>
+
+            </div>
+
+            {/* Stats */}
+            <div className="mt-12 grid grid-cols-2 gap-6 md:grid-cols-4">
+
+              <div>
+                <p className="text-3xl font-bold">12K+</p>
+                <p className="text-sm text-slate-400">
+                  Wallets Indexed
+                </p>
+              </div>
+
+              <div>
+                <p className="text-3xl font-bold">2.4M</p>
+                <p className="text-sm text-slate-400">
+                  Transactions
+                </p>
+              </div>
+
+              <div>
+                <p className="text-3xl font-bold">184K</p>
+                <p className="text-sm text-slate-400">
+                  NFT Holders
+                </p>
+              </div>
+
+              <div>
+                <p className="text-3xl font-bold">87</p>
+                <p className="text-sm text-slate-400">
+                  Avg Atlas Score
+                </p>
+              </div>
+
+            </div>
 
           </div>
 
-          {/* Heading */}
-          <h1 className="mt-10 text-7xl font-black tracking-[-0.05em] md:text-9xl">
-            Discover Your
-            <span className="block text-blue-400">
-              Onchain Identity
-            </span>
-          </h1>
+          {/* Right Side */}
+          <div className="relative">
 
-          {/* Search */}
-          <div className="mx-auto mt-12 flex max-w-4xl flex-col gap-4 md:flex-row">
+            <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-xl">
 
-            <input
-              value={wallet}
-              onChange={(e) => setWallet(e.target.value)}
-              placeholder="Paste your Base wallet address..."
-              className="w-full rounded-3xl border border-slate-700 bg-slate-900/80 px-6 py-5 text-white backdrop-blur-xl outline-none transition focus:border-blue-500"
-            />
+              <div className="mb-6 flex items-center justify-between">
+                <h3 className="text-lg font-semibold">
+                  Wallet Intelligence Preview
+                </h3>
 
-            <button
-              onClick={handleExplore}
-              className="rounded-3xl bg-[#0052FF] px-10 py-5 font-semibold text-white shadow-[0_0_40px_rgba(0,82,255,.6)] transition hover:scale-105 hover:bg-blue-600"
-            >
-              Analyze Wallet
-            </button>
+                <div className="rounded-full bg-green-500/20 px-3 py-1 text-xs text-green-400">
+                  Live
+                </div>
+              </div>
 
-          </div>
+              <div className="grid gap-4 md:grid-cols-2">
 
-          {/* Features */}
-          <div className="mt-20 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+                  <p className="text-sm text-slate-400">
+                    Atlas Score
+                  </p>
 
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-xl">
-              <h3 className="text-lg font-bold">
-                Wallet DNA
-              </h3>
+                  <p className="mt-2 text-4xl font-black text-blue-400">
+                    92
+                  </p>
+                </div>
 
-              <p className="mt-3 text-sm text-slate-400">
-                Understand your onchain personality.
-              </p>
-            </div>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+                  <p className="text-sm text-slate-400">
+                    Archetype
+                  </p>
 
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-xl">
-              <h3 className="text-lg font-bold">
-                Atlas Score
-              </h3>
+                  <p className="mt-2 text-2xl font-bold">
+                    Builder
+                  </p>
+                </div>
 
-              <p className="mt-3 text-sm text-slate-400">
-                Measure ecosystem reputation.
-              </p>
-            </div>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+                  <p className="text-sm text-slate-400">
+                    Wallet DNA
+                  </p>
 
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-xl">
-              <h3 className="text-lg font-bold">
-                NFT Portfolio
-              </h3>
+                  <p className="mt-2 text-2xl font-bold">
+                    Collector
+                  </p>
+                </div>
 
-              <p className="mt-3 text-sm text-slate-400">
-                Track collections and assets.
-              </p>
-            </div>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+                  <p className="text-sm text-slate-400">
+                    Reputation
+                  </p>
 
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-xl">
-              <h3 className="text-lg font-bold">
-                Onchain Reputation
-              </h3>
+                  <p className="mt-2 text-2xl font-bold">
+                    Top 5%
+                  </p>
+                </div>
 
-              <p className="mt-3 text-sm text-slate-400">
-                Discover hidden opportunities.
-              </p>
+              </div>
+
+              <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+
+                <div className="mb-3 flex justify-between">
+                  <span className="text-slate-400">
+                    Activity Score
+                  </span>
+
+                  <span>82%</span>
+                </div>
+
+                <div className="h-3 overflow-hidden rounded-full bg-slate-800">
+                  <div className="h-full w-[82%] rounded-full bg-blue-500" />
+                </div>
+
+              </div>
+
             </div>
 
           </div>
