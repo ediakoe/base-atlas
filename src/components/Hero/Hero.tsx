@@ -161,15 +161,6 @@ Generated with Base Atlas
   return Math.min(score, 99);
 }, [tier, calculations]);
 
-const valueColor =
-  calculations.estimatedValue > 5000
-    ? "text-yellow-400"
-    : calculations.estimatedValue > 1000
-    ? "text-green-400"
-    : calculations.estimatedValue > 100
-    ? "text-blue-400"
-    : "text-slate-300";
-
   return (
     <section className="relative overflow-hidden bg-[#030712] text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#1036a8_0%,#030712_55%)]" />
