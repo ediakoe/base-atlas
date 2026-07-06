@@ -4,7 +4,14 @@ if (!ALCHEMY_KEY) {
   console.warn("VITE_ALCHEMY_API_KEY is not set. Add it to your .env file.");
 }
 
-const ALCHEMY_URL = `https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`;
+// ✅ URL درست
+const ALCHEMY_URL = import.meta.env.DEV
+  ? `/alchemy-rpc/v2/${ALCHEMY_KEY}`
+  : `https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`;
+
+const ALCHEMY_NFT_URL = import.meta.env.DEV
+  ? `/alchemy-nft/nft/v3/${ALCHEMY_KEY}`
+  : `https://base-mainnet.g.alchemy.com/nft/v3/${ALCHEMY_KEY}`;
 
 export type TokenHolding = {
   symbol: string;
@@ -17,8 +24,8 @@ export type LastTransaction = {
   from: string;
   to: string;
   value: string;
-  asset: string; // واحد دارایی واقعی: ETH, USDC, ...
-  category: string; // نوع واقعی: external, erc20, erc721, erc1155
+  asset: string;
+  category: string;
   timeStamp: string;
 };
 
@@ -34,8 +41,7 @@ export type WalletAgeData = {
   firstActivity: string;
 };
 
-// helper مشترک برای فراخوانی JSON-RPC
-async function alchemyRpc(method: string, params: unknown[], id = 1) {
+export async function alchemyRpc(method: string, params: unknown[], id = 1) {
   const res = await fetch(ALCHEMY_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -67,7 +73,7 @@ export async function getTokenCount(address: string): Promise<number> {
 export async function getNFTCount(address: string): Promise<number> {
   try {
     const res = await fetch(
-      `https://base-mainnet.g.alchemy.com/nft/v3/${ALCHEMY_KEY}/getNFTsForOwner?owner=${address}&withMetadata=false`
+      `${ALCHEMY_NFT_URL}/getNFTsForOwner?owner=${address}&withMetadata=false`
     );
     if (!res.ok) return 0;
     const data = await res.json();
@@ -92,31 +98,33 @@ export async function getTopTokens(address: string): Promise<TokenHolding[]> {
         [token.contractAddress],
         100 + index
       );
+
+      const decimals = meta.result?.decimals ?? 18;
+      const symbol = meta.result?.symbol || "UNKNOWN";
+
+      const rawBalance = BigInt(token.tokenBalance || "0x0");
+      const realBalance = Number(rawBalance) / Math.pow(10, decimals);
+
+      const formatted =
+        realBalance < 0.001
+          ? realBalance.toExponential(2)
+          : realBalance.toLocaleString("en-US", { maximumFractionDigits: 4 });
+
       return {
-        symbol: meta.result?.symbol || "UNKNOWN",
-        balance: "Holding",
+        symbol,
+        balance: formatted,
         contractAddress: token.contractAddress,
       };
     } catch {
-      return {
-        symbol: "UNKNOWN",
-        balance: "Holding",
-        contractAddress: token.contractAddress,
-      };
+      return null;
     }
   });
 
-  return Promise.all(requests);
+  const results = await Promise.all(requests);
+  return results.filter((t): t is TokenHolding => t !== null);
 }
 
 export async function getWalletAge(address: string): Promise<WalletAgeData> {
-  // مستقیماً از Alchemy می‌خوانیم چون BaseScan در مرورگر CORS دارد
-  return getWalletAgeFromAlchemy(address);
-}
-
-async function getWalletAgeFromAlchemy(
-  address: string
-): Promise<WalletAgeData> {
   try {
     const data = await alchemyRpc(
       "alchemy_getAssetTransfers",
@@ -156,7 +164,6 @@ export async function getTransactionStats(
   address: string
 ): Promise<TransactionStats> {
   try {
-    // 1) تعداد کل تراکنش‌های ارسالی (nonce) - داده واقعی از RPC
     const countData = await alchemyRpc(
       "eth_getTransactionCount",
       [address, "latest"],
@@ -166,7 +173,6 @@ export async function getTransactionStats(
       ? parseInt(countData.result, 16)
       : 0;
 
-    // 2) آخرین تراکنش از طریق getAssetTransfers (هم ارسالی هم دریافتی)
     const [sentData, recvData] = await Promise.all([
       alchemyRpc(
         "alchemy_getAssetTransfers",
@@ -209,7 +215,6 @@ export async function getTransactionStats(
     let lastTransaction: LastTransaction | undefined = undefined;
 
     if (allTransfers.length > 0) {
-      // جدیدترین تراکنش بر اساس زمان واقعی بلاک
       allTransfers.sort(
         (a, b) =>
           new Date(b.metadata.blockTimestamp).getTime() -
@@ -220,7 +225,6 @@ export async function getTransactionStats(
       const ts = new Date(tx.metadata.blockTimestamp);
       lastActivity = ts.toLocaleDateString();
 
-      // فقط داده‌های واقعی برگردانده می‌شوند (فیلدهای فیک حذف شدند)
       lastTransaction = {
         hash: tx.hash,
         from: tx.from,
