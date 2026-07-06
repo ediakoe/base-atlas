@@ -4,8 +4,6 @@ import Navbar from "./components/Navbar";
 
 import Home from "./pages/Home";
 import Wallet from "./pages/Wallet";
-import Leaderboard from "./pages/Leaderboard";
-import Compare from "./pages/Compare";
 
 export default function App() {
   return (
@@ -15,8 +13,6 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/wallet/:address" element={<Wallet />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="/compare" element={<Compare />} />
       </Routes>
     </>
   );
