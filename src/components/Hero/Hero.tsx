@@ -3,7 +3,6 @@ import ProbabilityCard from "./ProbabilityCard";
 import ResultCard from "./ResultCard";
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import CountUp from "react-countup";
 import SpaceBackground from "../SpaceBackground";
 export default function Hero() {
   const navigate = useNavigate();
