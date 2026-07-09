@@ -2,6 +2,9 @@ import { useNavigate } from "react-router-dom";
 import ProbabilityCard from "./ProbabilityCard";
 import ResultCard from "./ResultCard";
 import { useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import CountUp from "react-countup";
+import SpaceBackground from "../SpaceBackground";
 export default function Hero() {
   const navigate = useNavigate();
 
@@ -163,10 +166,7 @@ Generated with Base Atlas
 
   return (
     <section className="relative overflow-hidden bg-[#030712] text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#1036a8_0%,#030712_55%)]" />
-
-      <div className="absolute left-1/2 top-0 h-[700px] w-[700px] -translate-x-1/2 rounded-full bg-blue-600/20 blur-[180px]" />
-
+      <SpaceBackground />
       <div className="relative mx-auto max-w-7xl px-6 py-24">
         <div className="grid items-center gap-16 lg:grid-cols-2">
 
@@ -177,12 +177,17 @@ Generated with Base Atlas
               AIRDROP ALLOCATION SIMULATOR
             </div>
 
-            <h1 className="mt-8 text-5xl font-black leading-tight md:text-7xl">
-              Estimate Your
-              <span className="block text-blue-400">
-                Next Airdrop
-              </span>
-            </h1>
+           <motion.h1
+  initial={{ opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8 }}
+  className="mt-8 text-5xl font-black leading-tight md:text-7xl"
+>
+  Explore The DNA
+  <span className="block text-blue-400">
+    Of Any Wallet
+  </span>
+</motion.h1>
 
             <p className="mt-6 max-w-xl text-lg text-slate-400">
               Adjust the sliders and instantly
