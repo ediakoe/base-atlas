@@ -4,6 +4,7 @@ import ResultCard from "./ResultCard";
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import SpaceBackground from "../SpaceBackground";
+import { formatNumber, formatUsd } from "../../lib/format";
 export default function Hero() {
   const navigate = useNavigate();
 
@@ -84,19 +85,13 @@ const analyzeWallet = () => {
 Airdrop Simulation
 
 Allocation:
-${Math.round(
-  calculations.estimatedAllocation
-).toLocaleString()} Tokens
+${formatNumber(calculations.estimatedAllocation)} Tokens
 
 Value:
-$${Math.round(
-      calculations.estimatedValue
-    ).toLocaleString()}
+${formatUsd(calculations.estimatedValue)}
 
 FDV:
-$${Math.round(
-      calculations.fdv
-    ).toLocaleString()}
+${formatUsd(calculations.fdv)}
 
 Generated with Base Atlas
 `;
@@ -111,15 +106,11 @@ Generated with Base Atlas
  const shareOnX = () => {
   const text =
     `I simulated my next airdrop using Base Atlas.%0A%0A` +
-    `Allocation: ${Math.round(
+    `Allocation: ${formatNumber(
       calculations.estimatedAllocation
-    ).toLocaleString()} Tokens%0A` +
-    `Value: $${Math.round(
-      calculations.estimatedValue
-    ).toLocaleString()}%0A` +
-    `FDV: $${Math.round(
-      calculations.fdv
-    ).toLocaleString()}%0A%0A` +
+    )} Tokens%0A` +
+    `Value: ${formatUsd(calculations.estimatedValue)}%0A` +
+    `FDV: ${formatUsd(calculations.fdv)}%0A%0A` +
     `⚡ Powered by Base Atlas`;
 
   window.open(
@@ -309,7 +300,7 @@ Generated with Base Atlas
                   </span>
 
                   <span className="font-bold text-purple-400">
-                    {wallets.toLocaleString()}
+                    {formatNumber(wallets)}
                   </span>
                 </div>
 
@@ -421,10 +412,7 @@ Generated with Base Atlas
                   </p>
 
                   <p className="mt-2 text-2xl font-black text-green-400">
-                    $
-                    {Math.round(
-                      calculations.fdv
-                    ).toLocaleString()}
+                    {formatUsd(calculations.fdv)}
                   </p>
                 </div>
 
@@ -434,10 +422,7 @@ Generated with Base Atlas
                   </p>
 
                   <p className="mt-2 text-2xl font-black text-cyan-400">
-                    $
-                    {Math.round(
-                      calculations.communityPoolValue
-                    ).toLocaleString()}
+                    {formatUsd(calculations.communityPoolValue)}
                   </p>
                 </div>
 
@@ -447,9 +432,7 @@ Generated with Base Atlas
                   </p>
 
                   <p className="mt-2 text-2xl font-black text-blue-400">
-                    {Math.round(
-                      calculations.communityPool
-                    ).toLocaleString()}
+                    {formatNumber(calculations.communityPool)}
                   </p>
                 </div>
 
@@ -459,9 +442,7 @@ Generated with Base Atlas
                   </p>
 
                   <p className="mt-2 text-2xl font-black text-purple-400">
-                    {Math.round(
-                      calculations.averageAllocation
-                    ).toLocaleString()}
+                    {formatNumber(calculations.averageAllocation)}
                   </p>
                 </div>
 

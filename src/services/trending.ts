@@ -1,3 +1,4 @@
+import { shortenAddress } from "../lib/address";
 import { alchemyRpc } from "./alchemy";
 
 export type TrendingWallet = {
@@ -28,10 +29,6 @@ async function getTransactionCount(address: string): Promise<number> {
   }
 }
 
-function shortAddress(address: string): string {
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
-}
-
 function getSignal(txCount: number): string {
   if (txCount > 100000) return "Mega Active Wallet";
   if (txCount > 10000) return "High Activity";
@@ -45,7 +42,7 @@ export async function getTrendingWallets(): Promise<TrendingWallet[]> {
       const totalTransactions = await getTransactionCount(address);
       return {
         address,
-        shortAddress: shortAddress(address),
+        shortAddress: shortenAddress(address),
         totalTransactions,
         signal: getSignal(totalTransactions),
       };

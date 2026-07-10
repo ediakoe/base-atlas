@@ -1,3 +1,6 @@
+import { formatNumber } from "../lib/format";
+import { getWalletRank } from "../lib/rank";
+
 type Props = {
   score: number;
 };
@@ -5,15 +8,7 @@ type Props = {
 export default function WalletRank({
   score,
 }: Props) {
-  const rank = Math.max(
-    1,
-    Math.round(10000 - score * 8)
-  );
-
-  const percentile = Math.min(
-    99,
-    Math.max(1, Math.round(score / 10))
-  );
+  const { rank, percentile } = getWalletRank(score);
 
   let badge = "Early User";
 
@@ -42,7 +37,7 @@ export default function WalletRank({
       <div className="mt-6">
 
         <h3 className="text-5xl font-black text-blue-400">
-          #{rank.toLocaleString()}
+          #{formatNumber(rank)}
         </h3>
 
         <p className="mt-3 text-slate-400">

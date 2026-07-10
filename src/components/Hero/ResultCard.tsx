@@ -1,3 +1,6 @@
+import { formatNumber, formatUsd } from "../../lib/format";
+import { pickByThreshold } from "../../lib/threshold";
+
 interface ResultCardProps {
   estimatedValue: number;
   estimatedAllocation: number;
@@ -13,14 +16,15 @@ export default function ResultCard({
   onCopy,
   onShare,
 }: ResultCardProps) {
-  const valueColor =
-    estimatedValue > 5000
-      ? "text-yellow-400"
-      : estimatedValue > 1000
-      ? "text-green-400"
-      : estimatedValue > 100
-      ? "text-blue-400"
-      : "text-slate-300";
+  const valueColor = pickByThreshold(
+    estimatedValue,
+    [
+      [5000, "text-yellow-400"],
+      [1000, "text-green-400"],
+      [100, "text-blue-400"],
+    ],
+    "text-slate-300"
+  );
 
   return (
     <>
@@ -32,24 +36,15 @@ export default function ResultCard({
         <h2
           className={`mt-4 text-7xl font-black ${valueColor}`}
         >
-          $
-          {Math.round(
-            estimatedValue
-          ).toLocaleString()}
+          {formatUsd(estimatedValue)}
         </h2>
 
         <p className="mt-3 text-xl text-slate-300">
-          {Math.round(
-            estimatedAllocation
-          ).toLocaleString()}{" "}
-          Tokens
+          {formatNumber(estimatedAllocation)} Tokens
         </p>
 
         <div className="mt-3 text-sm text-slate-400">
-          FDV $
-          {Math.round(
-            fdv
-          ).toLocaleString()}
+          FDV {formatUsd(fdv)}
         </div>
 
         <div className="mt-6 flex gap-3">
