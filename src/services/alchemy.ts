@@ -1,3 +1,5 @@
+import { isValidAddress } from "../lib/address";
+
 const ALCHEMY_KEY = import.meta.env.VITE_ALCHEMY_API_KEY;
 
 const ALCHEMY_URL = import.meta.env.DEV
@@ -42,6 +44,10 @@ export async function alchemyRpc(
 export async function getWalletBalance(
   address: string
 ): Promise<string> {
+  if (!isValidAddress(address)) {
+    throw new Error("Invalid wallet address");
+  }
+
   try {
     const data = await alchemyRpc(
       "eth_getBalance",
@@ -68,6 +74,10 @@ export async function getWalletBalance(
 export async function getWalletAge(
   address: string
 ): Promise<string> {
+  if (!isValidAddress(address)) {
+    throw new Error("Invalid wallet address");
+  }
+
   try {
     const incoming = await alchemyRpc(
       "alchemy_getAssetTransfers",
@@ -183,9 +193,15 @@ export async function getWalletAge(
 export async function getNFTCount(
   address: string
 ): Promise<number> {
+  if (!isValidAddress(address)) {
+    throw new Error("Invalid wallet address");
+  }
+
   try {
     const res = await fetch(
-      `${ALCHEMY_NFT_URL}/getNFTsForOwner?owner=${address}&withMetadata=false`
+      `${ALCHEMY_NFT_URL}/getNFTsForOwner?owner=${encodeURIComponent(
+        address
+      )}&withMetadata=false`
     );
 
     if (!res.ok) {
