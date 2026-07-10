@@ -4,10 +4,13 @@ import ResultCard from "./ResultCard";
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import SpaceBackground from "../SpaceBackground";
+import { isValidAddress } from "../../lib/address";
 export default function Hero() {
   const navigate = useNavigate();
 
 const [walletAddress, setWalletAddress] =
+  useState("");
+const [addressError, setAddressError] =
   useState("");
 
 const analyzeWallet = () => {
@@ -15,6 +18,14 @@ const analyzeWallet = () => {
 
   if (!address) return;
 
+  if (!isValidAddress(address)) {
+    setAddressError(
+      "Enter a valid Base wallet address (0x + 40 hex characters)."
+    );
+    return;
+  }
+
+  setAddressError("");
   navigate(`/wallet/${address}`);
 };
   const [supply, setSupply] = useState(10000000000);
@@ -230,6 +241,12 @@ Generated with Base Atlas
       Analyze Wallet
     </button>
   </div>
+
+  {addressError && (
+    <p className="mt-3 text-sm text-red-400">
+      {addressError}
+    </p>
+  )}
 </div>
             <div className="mt-10 space-y-6">
 
