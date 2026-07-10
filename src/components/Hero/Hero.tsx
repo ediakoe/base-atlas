@@ -101,11 +101,22 @@ $${Math.round(
 Generated with Base Atlas
 `;
 
-    await navigator.clipboard.writeText(
-      text
-    );
+    try {
+      await navigator.clipboard.writeText(
+        text
+      );
 
-    alert("Copied!");
+      alert("Copied!");
+    } catch (error) {
+      console.error(
+        "Clipboard copy failed:",
+        error
+      );
+
+      alert(
+        "Copy failed. Your browser blocked clipboard access."
+      );
+    }
   };
 
  const shareOnX = () => {

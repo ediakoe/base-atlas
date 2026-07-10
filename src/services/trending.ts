@@ -23,7 +23,13 @@ async function getTransactionCount(address: string): Promise<number> {
       Math.floor(Math.random() * 1000)
     );
     return data.result ? parseInt(data.result, 16) : 0;
-  } catch {
+  } catch (error) {
+    // Degrade gracefully for a single wallet so the whole trending list still
+    // renders, but don't swallow the failure silently.
+    console.error(
+      `Trending: failed to load transaction count for ${address}:`,
+      error
+    );
     return 0;
   }
 }
