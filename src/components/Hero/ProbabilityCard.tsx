@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 interface ProbabilityCardProps {
   probability: number;
 }
@@ -9,63 +11,60 @@ export default function ProbabilityCard({
     probability >= 75
       ? "HIGH"
       : probability >= 45
-      ? "MEDIUM"
-      : "LOW";
+        ? "MEDIUM"
+        : "LOW";
 
   const color =
     probability >= 75
-      ? "text-green-400"
+      ? "text-emerald-300"
       : probability >= 45
-      ? "text-yellow-400"
-      : "text-red-400";
+        ? "text-yellow-300"
+        : "text-red-300";
 
-  const bg =
+  const bar =
     probability >= 75
-      ? "border-green-500/30 bg-green-500/10"
+      ? "bg-emerald-300"
       : probability >= 45
-      ? "border-yellow-500/30 bg-yellow-500/10"
-      : "border-red-500/30 bg-red-500/10";
+        ? "bg-yellow-300"
+        : "bg-red-300";
 
   return (
-    <div
-      className={`mb-6 rounded-3xl border p-6 text-center backdrop-blur-xl ${bg}`}
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55, delay: 0.22 }}
+      className="mb-6 rounded-[2rem] border border-white/10 bg-slate-950/55 p-6 backdrop-blur-2xl"
     >
-      <p className="text-sm uppercase tracking-[0.2em] text-slate-400">
-        Airdrop Probability
-      </p>
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+            Airdrop Probability
+          </p>
 
-      <h2
-        className={`mt-4 text-6xl font-black ${color}`}
-      >
-        {probability}%
-      </h2>
+          <div className={`mt-3 text-4xl font-black ${color}`}>
+            {probability}%
+          </div>
+        </div>
 
-      <div
-        className={`mt-2 text-lg font-bold ${color}`}
-      >
-        {level}
+        <div
+          className={`w-fit rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 text-sm font-black ${color}`}
+        >
+          {level}
+        </div>
       </div>
 
       <div className="mt-6 h-3 overflow-hidden rounded-full bg-slate-800">
-        <div
-          className={`h-full rounded-full transition-all duration-700 ${
-            probability >= 75
-              ? "bg-green-400"
-              : probability >= 45
-              ? "bg-yellow-400"
-              : "bg-red-400"
-          }`}
-          style={{
-            width: `${probability}%`,
-          }}
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${probability}%` }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className={`h-full rounded-full ${bar}`}
         />
       </div>
 
-      <p className="mt-4 text-sm text-slate-400">
-        Based on wallet tier,
-        allocation size and
-        estimated reward value.
+      <p className="mt-4 text-sm leading-6 text-slate-400">
+        Based on wallet tier, allocation size and estimated reward value.
       </p>
-    </div>
+    </motion.div>
   );
 }

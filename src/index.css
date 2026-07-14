@@ -27,3 +27,14 @@ body {
 #root {
   min-height: 100vh;
 }
+
+::selection {
+  background: rgba(59, 130, 246, 0.35);
+  color: #ffffff;
+}
+
+input[type="range"] {
+  height: 0.5rem;
+  border-radius: 999px;
+  background: rgba(30, 41, 59, 0.9);
+}
