@@ -4,13 +4,15 @@ interface ResultCardProps {
   estimatedValue: number;
   estimatedAllocation: number;
   fdv: number;
-  onShare: () => void;
+  onCopy?: () => Promise<void> | void;   // اضافه شد
+  onShare?: () => void;                  // اختیاری شد
 }
 
 export default function ResultCard({
   estimatedValue,
   estimatedAllocation,
   fdv,
+  onCopy,
   onShare,
 }: ResultCardProps) {
   const valueColor =
@@ -48,13 +50,24 @@ export default function ResultCard({
           Fully diluted value ${Math.round(fdv).toLocaleString()}
         </div>
 
-        <div className="mt-6">
-          <button
-            onClick={onShare}
-            className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-5 py-4 font-semibold text-slate-100 transition hover:-translate-y-0.5 hover:border-blue-400/40"
-          >
-            Share on X
-          </button>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          {onCopy && (
+            <button
+              onClick={onCopy}
+              className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-5 py-4 font-semibold text-slate-100 transition hover:-translate-y-0.5 hover:border-blue-400/40"
+            >
+              Copy Result
+            </button>
+          )}
+
+          {onShare && (
+            <button
+              onClick={onShare}
+              className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-5 py-4 font-semibold text-slate-100 transition hover:-translate-y-0.5 hover:border-blue-400/40"
+            >
+              Share on X
+            </button>
+          )}
         </div>
       </motion.div>
 

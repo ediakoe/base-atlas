@@ -67,7 +67,7 @@ export async function getWalletBalance(
 
 export async function getWalletAge(
   address: string
-): Promise<string> {
+): Promise<{ label: string; days: number; since: string }> {
   try {
     const incoming = await alchemyRpc(
       "alchemy_getAssetTransfers",
@@ -113,7 +113,7 @@ export async function getWalletAge(
     ];
 
     if (transfers.length === 0) {
-      return "No History";
+      return { label: "No History", days: 0, since: "—" };
     }
 
     let earliestTransfer = transfers[0];
@@ -141,7 +141,7 @@ export async function getWalletAge(
       );
 
     if (!blockData.result?.timestamp) {
-      return "Unknown";
+      return { label: "Unknown", days: 0, since: "—" };
     }
 
     const timestamp =
@@ -157,26 +157,33 @@ export async function getWalletAge(
       ageMs / 86400000
     );
 
-    if (days < 30) {
-      return `${days} Days`;
+    const years = Math.floor(days / 365);
+    const months = Math.floor((days % 365) / 30);
+    const remainingDays = days % 30;
+
+    let label = "";
+    if (years > 0) {
+      label = `${years}y ${months}m`;
+    } else if (months > 0) {
+      label = `${months}m ${remainingDays}d`;
+    } else {
+      label = `${days}d`;
     }
 
-    if (days < 365) {
-      return `${Math.floor(
-        days / 30
-      )} Months`;
-    }
+    const sinceDate = new Date(timestamp);
+    const since = sinceDate.toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
 
-    return `${(
-      days / 365
-    ).toFixed(1)} Years`;
+    return { label, days, since };
   } catch (error) {
     console.error(
       "Wallet Age Error:",
       error
     );
 
-    return "Unknown";
+    return { label: "Unknown", days: 0, since: "—" };
   }
 }
 
